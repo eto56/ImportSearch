@@ -1,8 +1,0 @@
-LICENSE
-setup.py
-moduletracker/__init__.py
-moduletracker/moduletracker.py
-moduletracker.egg-info/PKG-INFO
-moduletracker.egg-info/SOURCES.txt
-moduletracker.egg-info/dependency_links.txt
-moduletracker.egg-info/top_level.txt
