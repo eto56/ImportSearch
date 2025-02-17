@@ -1,6 +1,6 @@
-# ImportSearch
+# importsearch
 
-ImportSearch is a tool for scanning and auditing your Python scripts for all imported modules. It helps you quickly understand your project's dependencies by parsing your source files and listing every module that is imported.
+importsearch is a tool for scanning and auditing your Python scripts for all imported modules. It helps you quickly understand your project's dependencies by parsing your source files and listing every module that is imported.
 
 ## Features
 
@@ -9,7 +9,7 @@ ImportSearch is a tool for scanning and auditing your Python scripts for all imp
 
 ## Installation
 
-You can install ImportSearch using pip:
+You can install importsearch using pip:
 
 ```bash
-pip install ImportSearch
+pip install importsearch

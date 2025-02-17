@@ -1,9 +1,0 @@
-LICENSE
-README.md
-setup.py
-ImportSearch.egg-info/PKG-INFO
-ImportSearch.egg-info/SOURCES.txt
-ImportSearch.egg-info/dependency_links.txt
-ImportSearch.egg-info/top_level.txt
-moduletracker/__init__.py
-moduletracker/moduletracker.py
