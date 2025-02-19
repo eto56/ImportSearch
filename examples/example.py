@@ -1,10 +1,8 @@
-# examples/main.py
-
-import importsearch
+from importsearch import importsearch
 
 def main():
     target_file = 'main.py'
-    search = importsearch.importsearch()
+    search = importsearch()
     search.search([target_file])
 
 if __name__ == '__main__':
