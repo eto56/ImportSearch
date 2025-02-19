@@ -6,6 +6,8 @@ importsearch is a tool for scanning and auditing your Python scripts for all imp
 
 - **Dependency Audit:** Provides a clear list of external libraries and modules your project relies on.
 
+## installs
+[![PyPI Downloads](https://static.pepy.tech/badge/importsearch)](https://pepy.tech/projects/importsearch)
 
 ## Installation
 
