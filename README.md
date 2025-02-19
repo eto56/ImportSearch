@@ -15,3 +15,24 @@ You can install importsearch using pip:
 
 ```bash
 pip install importsearch
+
+## Usage
+
+### Function Form (preferred)
+
+absolute path to the target file is preferred
+
+```python
+import importsearch
+
+target_file = 'path/to/your/file.py'
+importsearch.search(target_file)
+```
+
+### class Form
+```python
+import importsearch
+target_file = 'path/to/your/file.py'
+search = importsearch(target_file, debug=True)
+search.search()
+```

@@ -1,23 +1,40 @@
 import ast
 import os
 
-from tree import print_tree  
 
+from .tree import print_tree
 
 
 class importsearch:
-    def __init__(self,filename=''):
+    def __init__(self,filename='',debug=False):
         self.visited = set()
         self.summary_map = {}
+        self.debug = debug
         self.init_file = ''
+      
+        
         self.chdir(filename)
+      
+        
 
     def pre_dir(self,filename):
         # get the previous directory
         return os.path.dirname(filename)
     
+
+    def move_to_this_dir(self):
+        current_file = os.path.abspath(__file__)
+         
+        current_dir = os.path.dirname(current_file)
+         
+        os.chdir(current_dir)
+        if self.debug:
+            print('Current directory: ' + current_dir)
+    
     
     def chdir(self,filename):
+
+        
 
         # change directory to the directory of the target file
         if not os.path.exists(filename):
@@ -25,9 +42,14 @@ class importsearch:
         if os.path.isdir(filename):
             os.chdir(filename)
         else:
-            os.chdir(os.path.dirname(filename))
+            dir = os.path.dirname(filename) 
+
+            if dir:
+                os.chdir(dir)
+             
         self.init_file = self.get_script_name(filename)
-        #print('Initial file: ' + self.init_file)
+        if self.debug:
+            print('Initial file: ' + self.init_file)
 
 
     def extract_imports(self, filename):
@@ -115,7 +137,7 @@ class importsearch:
         print ('Visited files: ' + str(self.visited))
         print ()
         print ('-----------------------')
-        print ('import tree')
+        print ('import-tree')
         print ()
         print_tree(self.summary_map,self.init_file)
         
