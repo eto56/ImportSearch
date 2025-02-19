@@ -15,6 +15,7 @@ You can install importsearch using pip:
 
 ```bash
 pip install importsearch
+```
 
 ## Usage
 
