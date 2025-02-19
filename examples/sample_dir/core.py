@@ -1,55 +1,14 @@
 import ast
 import os
 
+from tree import print_tree  
 
-from .tree import print_tree
 
 
 class importsearch:
-    def __init__(self,filename='',debug=False):
+    def __init__(self):
         self.visited = set()
         self.summary_map = {}
-        self.debug = debug
-        self.init_file = ''
-      
-        
-        self.chdir(filename)
-      
-        
-
-    def pre_dir(self,filename):
-        # get the previous directory
-        return os.path.dirname(filename)
-    
-
-    def move_to_this_dir(self):
-        current_file = os.path.abspath(__file__)
-         
-        current_dir = os.path.dirname(current_file)
-         
-        os.chdir(current_dir)
-        if self.debug:
-            print('Current directory: ' + current_dir)
-    
-    
-    def chdir(self,filename):
-
-        
-
-        # change directory to the directory of the target file
-        if not os.path.exists(filename):
-            return
-        if os.path.isdir(filename):
-            os.chdir(filename)
-        else:
-            dir = os.path.dirname(filename) 
-
-            if dir:
-                os.chdir(dir)
-             
-        self.init_file = self.get_script_name(filename)
-        if self.debug:
-            print('Initial file: ' + self.init_file)
 
 
     def extract_imports(self, filename):
@@ -68,7 +27,7 @@ class importsearch:
         imports = []
         
         for node in ast.walk(tree):
-           
+            print (node)
             if isinstance(node, ast.Import):
                 for alias in node.names:
                     imports.append(alias.name)
@@ -85,7 +44,7 @@ class importsearch:
 
         module_list = filename_list.copy()
         path_list = []
-        #print("dir",filename_list)
+        print("dir",filename_list)
         for module in module_list:
             filename_split = module.split('.')
             path = os.path.join(*filename_split)
@@ -100,7 +59,7 @@ class importsearch:
         # filename_list: list of filenames
         # visited: set of visited filenames
         # graph: dictionary of filename -> list of filenames
-        #print(filename_list)
+        print(filename_list)
         for filename in filename_list:
             if filename in self.visited:
                 continue
@@ -112,7 +71,7 @@ class importsearch:
 
            
             
-            #print (filename,next_files)
+            print (filename,next_files)
             if next_files==[]:
                 continue
 
@@ -124,62 +83,38 @@ class importsearch:
 
 
     def summary(self):
-        self.summary_map = self.edit_map(self.summary_map)
         for key in  self.summary_map.keys():
-            print ()
+
             print ('File: ' + key)
             print(str( self.summary_map[key]))
-            print ()
             print ('-----------------------')
          
 
-        print ()
+        
         print ('Visited files: ' + str(self.visited))
-        print ()
-        print ('-----------------------')
-        print ('import-tree')
-        print ()
-        print_tree(self.summary_map,self.init_file)
-        
-        
-    def edit_map(self,map):
 
-        map_index = set()
-        for key in map:
-            map_index.add(key)
-        
-        for key in map:
-            for value in map[key]:
-                pyf = value + '.py'
-                if pyf in map_index:
-                    # add .py to the value
-                    
-
-                    map[key].remove(value)
-                    map[key].append(pyf)
-        return map
-
+        print_tree(self.summary_map,'core.py')
+ 
          
     
-    def search(self):
-        self.dfs_search([self.init_file])
+    def search(self, filename_list):
+        self.dfs_search(filename_list)
         self.summary()
-
-
-    def get_script_name(self,filename):
-        return os.path.basename(filename)
+        
     
+        
 
-def search (filename):
-    search = importsearch(filename)
-    search.search()
-    
-     
+         
+
+
 if __name__ == '__main__':
     
-    target_file = '../../examples/sample_dir/main.py'
+    target_file = 'main.py'
 
-    search(target_file)
+    search = importsearch()
+
+    search.search([target_file])
+
 
  
 
