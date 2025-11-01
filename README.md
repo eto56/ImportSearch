@@ -34,6 +34,6 @@ importsearch.search(target_file)
 ```python
 import importsearch
 target_file = 'path/to/your/file.py'
-search = importsearch(target_file, debug=True)
+search = importsearch(target_file, verbose=True)
 search.search()
 ```

@@ -11,14 +11,29 @@ authors = [
 ]
 description = "A package to track your imports"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
+dependencies = [
+    "typer>=0.19.2",
+    "rich>=13.9.2",
+]
+
+[project.scripts]
+importsearch = "importsearch.cli:import_search_app"
 
 [project.urls]
 Homepage = "https://github.com/eto56/ImportSearch"
 Issues = "https://github.com/eto56/ImportSearch/issues"
+
+[dependency-groups]
+dev = [
+    "graphviz>=0.21",
+    "mypy>=1.18.2",
+    "pytest>=8.3.5",
+    "ruff>=0.14.0",
+]
