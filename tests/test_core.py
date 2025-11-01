@@ -4,7 +4,6 @@ from argparse import Namespace
 from pathlib import Path
 from textwrap import dedent
 
-import pytest
 from typer.testing import CliRunner
 
 from importsearch.main import Dependency, importsearch
