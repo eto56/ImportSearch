@@ -5,8 +5,10 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
+from typer.testing import CliRunner
 
 from importsearch.main import Dependency, importsearch
+from importsearch.cli import import_search_app
 
 FIXTURE_ROOT = Path(__file__).parent / "fixtures" / "dependency_demo"
 
@@ -104,3 +106,101 @@ def test_fixture_project_builds_expected_graph() -> None:
         "utilities/formatters/json_formatter.py",
     }
     assert expected <= visited
+
+
+def test_relative_imports_are_resolved(tmp_path: Path) -> None:
+    pkg = tmp_path / "pkg"
+    pkg.mkdir()
+    (pkg / "__init__.py").write_text("from .module import do\n", encoding="utf-8")
+    (pkg / "module.py").write_text("def do():\n    return 1\n", encoding="utf-8")
+    main_file = tmp_path / "main.py"
+    main_file.write_text("import pkg\n", encoding="utf-8")
+
+    searcher = make_searcher(tmp_path, "main.py")
+    searcher.search()
+
+    summary = searcher._normalize_summary_map(searcher.dependency_graph)
+
+    assert summary["main.py"] == ["pkg/__init__.py"]
+    assert summary["pkg/__init__.py"] == ["pkg/module.py"]
+
+
+def test_cli_text_output_generates_report(tmp_path: Path) -> None:
+    (tmp_path / "module.py").write_text(
+        "def run():\n    return 'ok'\n", encoding="utf-8"
+    )
+    main_file = tmp_path / "main.py"
+    main_file.write_text("import module\n", encoding="utf-8")
+    output_stub = tmp_path / "dependency_report"
+
+    runner = CliRunner()
+    result = runner.invoke(
+        import_search_app,
+        [
+            str(main_file),
+            "--root",
+            str(tmp_path),
+            "--output-format",
+            "text",
+            "--output-file",
+            str(output_stub),
+        ],
+        catch_exceptions=False,
+    )
+
+    assert result.exit_code == 0
+    output_file = output_stub.with_suffix(".txt")
+    assert output_file.exists()
+    content = output_file.read_text(encoding="utf-8")
+    assert "File: main.py" in content
+    assert "module.py" in content
+
+
+def test_cli_accepts_file_relative_to_root(tmp_path: Path) -> None:
+    pkg = tmp_path / "pkg"
+    pkg.mkdir()
+    (pkg / "__init__.py").write_text("from .module import value\n", encoding="utf-8")
+    (pkg / "module.py").write_text("value = 1\n", encoding="utf-8")
+
+    root = tmp_path
+    # note: relative file path with root option
+    runner = CliRunner()
+    result = runner.invoke(
+        import_search_app,
+        [
+            "pkg/__init__.py",
+            "--root",
+            str(root),
+            "--output-format",
+            "json",
+            "--output-file",
+            str(root / "out"),
+        ],
+        catch_exceptions=False,
+    )
+
+    assert result.exit_code == 0
+    content = (root / "out.json").read_text(encoding="utf-8")
+    assert '"pkg/__init__.py"' in content
+
+
+def test_cli_handles_paths_already_prefixed_with_root(tmp_path: Path) -> None:
+    pkg = tmp_path / "pkg"
+    pkg.mkdir()
+    entry = pkg / "entry.py"
+    entry.write_text("import sys\n", encoding="utf-8")
+
+    runner = CliRunner()
+    result = runner.invoke(
+        import_search_app,
+        [
+            str(pkg / "entry.py"),
+            "--root",
+            str(tmp_path),
+            "--output-format",
+            "print",
+        ],
+        catch_exceptions=False,
+    )
+
+    assert result.exit_code == 0

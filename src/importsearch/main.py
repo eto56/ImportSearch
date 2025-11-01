@@ -59,6 +59,8 @@ class importsearch:
     def _coerce_target(self, candidate: Path | str) -> Path:
         path = Path(candidate)
         if not path.is_absolute():
+            if path.exists():
+                return path.resolve()
             path = self.root_path / path
         if path.is_dir():
             candidate_path = path / "__init__.py"
