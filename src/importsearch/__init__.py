@@ -1,6 +1,6 @@
 # src/importsearch/__init__.py
 
-from importsearch.main import importsearch
+from .main import importsearch
 
 __all__ = [
     "importsearch",

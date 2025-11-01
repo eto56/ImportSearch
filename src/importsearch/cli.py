@@ -1,8 +1,10 @@
-import typer
-from typing_extensions import Annotated
-from importsearch.main import importsearch
 import argparse
 from pathlib import Path
+
+import typer
+from typing_extensions import Annotated
+
+from .main import importsearch
 
 import_search_app = typer.Typer(
     help="Import Search -- A tool to analyze Python import dependencies."

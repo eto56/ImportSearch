@@ -12,7 +12,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from importsearch.tree import print_tree
+from .tree import print_tree
 
 
 @dataclass(frozen=True)
