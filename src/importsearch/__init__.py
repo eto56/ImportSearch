@@ -1,11 +1,7 @@
-
-
 # src/importsearch/__init__.py
 
-from .core import importsearch
-from .core import search      
+from .main import importsearch
 
- 
-
-__all__ = ["importsearch","search"]
-
+__all__ = [
+    "importsearch",
+]

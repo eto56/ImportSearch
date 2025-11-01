@@ -1,39 +1,71 @@
 # importsearch
 
-importsearch is a tool for scanning and auditing your Python scripts for all imported modules. It helps you quickly understand your project's dependencies by parsing your source files and listing every module that is imported.
+importsearch is a CLI tool that inspects Python files and reports the import dependency graph for a given entry point.  
+Specify a target file and instantly view the downstream files and modules that it touches.
+
+> Looking for the Japanese guide? See [README-ja.md](./README-ja.md).
 
 ## Features
 
-- **Dependency Audit:** Provides a clear list of external libraries and modules your project relies on.
-
-## installs
-[![PyPI Downloads](https://static.pepy.tech/badge/importsearch)](https://pepy.tech/projects/importsearch)
+- **Rich CLI report:** Presents dependencies and visited files in a styled table.
+- **Multiple output formats:** Choose between `print` (decorated), `text`, and `json`.
+- **Stable traversal:** Works on `Path` objects, avoiding cycles and duplicates during analysis.
 
 ## Installation
-
-You can install importsearch using pip:
 
 ```bash
 pip install importsearch
 ```
 
-## Usage
+## CLI Usage
 
-### Function Form (preferred)
-
-absolute path to the target file is preferred
-
-```python
-import importsearch
-
-target_file = 'path/to/your/file.py'
-importsearch.search(target_file)
+```bash
+importsearch path/to/main.py --root . --output-format print
 ```
 
-### class Form
-```python
-import importsearch
-target_file = 'path/to/your/file.py'
-search = importsearch(target_file, debug=True)
-search.search()
+### Common options
+
+- `--root / -r`: Root directory for the analysis (defaults to the current directory)  
+- `--output-format / -o`: `print` | `text` | `json`  
+- `--output-file / -of`: Base name for `text` / `json` reports (extension is added automatically)  
+- `--verbose / -v`: Display progress logs during the walk
+
+### Example: Save a text report
+
+```bash
+importsearch src/main.py --root . --output-format text --output-file report
 ```
+
+The command prints the summary to stdout and writes it to `report.txt`.
+
+## Optional: Programmatic Usage
+
+While the CLI is the primary interface, you can instantiate the searcher directly:
+
+```python
+import argparse
+from pathlib import Path
+from importsearch import importsearch
+
+args = argparse.Namespace(
+    file_path=Path("src/main.py"),
+    root_path=Path("."),
+    output_format="json",
+    output_path=Path("dependencies"),
+    verbose=False,
+)
+
+searcher = importsearch(args)
+searcher.search()
+searcher.summary()
+```
+
+## Development
+
+Run the test suite with `pytest`:
+
+```bash
+pytest
+```
+
+Contributions are welcome! If you have ideas for improvements, please open an issue or submit a pull request.
