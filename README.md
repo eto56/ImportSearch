@@ -5,6 +5,9 @@ Specify a target file and instantly view the downstream files and modules that i
 
 > Looking for the Japanese guide? See [README-ja.md](./README-ja.md).
 
+## installs
+[![PyPI Downloads](https://static.pepy.tech/badge/importsearch)](https://pepy.tech/projects/importsearch)
+
 ## Features
 
 - **Rich CLI report:** Presents dependencies and visited files in a styled table.
